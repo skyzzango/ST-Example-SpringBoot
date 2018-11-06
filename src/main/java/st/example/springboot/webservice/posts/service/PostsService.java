@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import st.example.springboot.webservice.posts.domain.PostsRepository;
+import st.example.springboot.webservice.posts.dto.PostsMainResponseDto;
 import st.example.springboot.webservice.posts.dto.PostsSaveRequestDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Created by KH on 2018.11.06
@@ -18,8 +22,8 @@ import st.example.springboot.webservice.posts.dto.PostsSaveRequestDto;
 @AllArgsConstructor
 @Service
 public class PostsService {
-	private PostsRepository postsRepository;
 
+	private PostsRepository postsRepository;
 
 	/* @Transactional:
 	 * 일반적으로 DB 데이터를 등록/수정/삭제 하는 Service 메소드는 @Transactional 를 필수적으로 가져갑니다.
@@ -31,5 +35,14 @@ public class PostsService {
 	@Transactional
 	public Long save(PostsSaveRequestDto dto) {
 		return postsRepository.save(dto.toEntity()).getId();
+	}
+
+	/* Transactional(readOnly = true): 이 옵션을 주면 트랜젝션 범위는 유지하되,
+	조회 기능만 남겨두어 조회 속도가 개선되지 때문에 특별히 등록/수정/삭제 기능이 없는 메소드에선 사용하시는걸 추천드립니다. */
+	@Transactional(readOnly = true)
+	public List<PostsMainResponseDto> findAllDesc() {
+		return postsRepository.findAllDesc()
+				.map(PostsMainResponseDto::new)
+				.collect(Collectors.toList());
 	}
 }

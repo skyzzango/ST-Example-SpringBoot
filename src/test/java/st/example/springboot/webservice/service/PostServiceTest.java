@@ -8,8 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import st.example.springboot.webservice.posts.domain.Posts;
 import st.example.springboot.webservice.posts.domain.PostsRepository;
+import st.example.springboot.webservice.posts.dto.PostsMainResponseDto;
 import st.example.springboot.webservice.posts.dto.PostsSaveRequestDto;
 import st.example.springboot.webservice.posts.service.PostsService;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,5 +53,18 @@ public class PostServiceTest {
 		assertThat(posts.getAuthor()).isEqualTo(dto.getAuthor());
 		assertThat(posts.getContent()).isEqualTo(dto.getContent());
 		assertThat(posts.getTitle()).isEqualTo(dto.getTitle());
+	}
+
+	@Test
+	public void testPostsFindAllAndSort() {
+		// given
+		// 테스트 실행시 자동으로 데이터 2개 삽입
+
+		// when
+		List<PostsMainResponseDto> postsList = postsService.findAllDesc();
+
+		// then
+		assertThat(postsList.get(0).getTitle()).isEqualTo("테스트2");
+		assertThat(postsList.get(1).getTitle()).isEqualTo("테스트1");
 	}
 }

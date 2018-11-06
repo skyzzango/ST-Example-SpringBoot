@@ -2,7 +2,9 @@ package st.example.springboot.webservice.web;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import st.example.springboot.webservice.posts.service.PostsService;
 
 /*
  * Created by KH on 2018.11.06
@@ -17,10 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 public class WebController {
 
+	private PostsService postsService;
+
 	/* @GetMapping: Spring 4.3 부터는 @RequestMapping 을 대체할 수 있는 여러 매핑 어노테이션이 추가 되었습니다.
 	 * 위에서 나온 @GetMapping 은 이전으로 보면 @RequestMapping(value="/", method = RequestMethod.GET)과 동일합니다. */
 	@GetMapping("/")
-	public String main() {
+	public String main(Model model) {
+		model.addAttribute("posts", postsService.findAllDesc());
 		return "main";
 	}
 }
