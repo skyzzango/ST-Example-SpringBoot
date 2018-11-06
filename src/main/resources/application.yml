@@ -1,9 +1,28 @@
-# Tip: application.properties 를 사용하셔도 무방합니다만,
+# Tip1: application.properties 를 사용하셔도 무방합니다만,
 # 굳이 yml 로 변경한 이유는 properties 에 비해 상대적으로 유연한 구조를 가졌기 때문입니다.
 # yml 은 상위 계층에 대한 표현, List 등을 완전하게 표현할수가 있습니다.
 # 최근의 많은 도구들이 yml 설정을 지원하기 때문에 이참에 시작해보시는 것을 추천드립니다.
+# Tip2: application.yml 에서 --- 를 기준으로 상단은 공통 영역이며, 하단이 각 profile 의 설정 영역입니다.
+# 공통영역의 값은 각 profile 환경에 동일한 설정이 있으면 무시되고, 없으면 공통영역의 설정값이 사용됩니다.
+# 그렇다보니 공통영역에 설정값을 넣는것에 굉장히 주의가 필요합니다.
+# 만약 공통영역에 jpa.hibernate.ddl-auto:create-drop 가 있고,
+# 운영 profile 에 해당 설정값이 없다면 운영환경에서 배포시 모든 테이블이 drop -> create 됩니다.
+# 이때문에 datasource, table 등과 같은 옵션들은 공통영역엔 두지 않고 각 profile 마다 별도로 두는것을 추천합니다.
 
 spring:
+  profiles:
+    active: local # 기본 환경 선택
+
+# local 환경
+---
+spring:
+  profiles: local
+  datasource:
+    data: classpath:data-h2.sql # 시작할때 실행시킬 script
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
   h2:
     console:
       enabled: true

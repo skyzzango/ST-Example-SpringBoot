@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import st.example.springboot.webservice.common.BaseTimeEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /*
  * Created by KH on 2018.11.06
@@ -36,7 +33,7 @@ public class Posts extends BaseTimeEntity {
 	 * - 기본 값은 AUTO 로, MySQL 의 auto_increment 와 같이 자동증가하는 정수형 값이 됩니다.
 	 * - 스프링 부트 2.0에선 옵션을 추가하셔야만 auto_increment 가 됩니다. */
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // 비지니스상 유니크키나 여러키를 조합해야할 상황이 있으므로 Long 타입을 추천
 
 	/* @Column: 테이블의 컬럼을 나타내면, 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됩니다.
